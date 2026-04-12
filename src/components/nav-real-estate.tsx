@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,13 +16,14 @@ export function NavRealEstate({
     icon?: React.ReactNode
   }[]
 }) {
+  const location = useLocation()
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Real Estate</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
+            <SidebarMenuButton asChild tooltip={item.title} isActive={location.pathname === item.url}>
               <Link to={item.url}>
                 {item.icon}
                 <span>{item.title}</span>

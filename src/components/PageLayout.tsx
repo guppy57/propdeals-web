@@ -1,9 +1,26 @@
 import * as React from "react"
+import { Outlet, useLocation } from "react-router-dom"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 
-export function PageLayout({ title, children }: { title: string; children: React.ReactNode }) {
+const PAGE_TITLES: Record<string, string> = {
+  "/home": "Home",
+  "/assumption-sets": "Assumption Sets",
+  "/loans": "Loans",
+  "/properties": "Properties",
+  "/analyses": "Analyses",
+  "/neighborhoods": "Neighborhoods",
+  "/settings": "Settings",
+  "/account": "Account",
+  "/billing": "Billing",
+  "/notifications": "Notifications",
+}
+
+export function PageLayout() {
+  const location = useLocation()
+  const title = PAGE_TITLES[location.pathname] ?? ""
+
   return (
     <SidebarProvider
       style={
@@ -16,7 +33,7 @@ export function PageLayout({ title, children }: { title: string; children: React
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader title={title} />
-        {children}
+        <Outlet />
       </SidebarInset>
     </SidebarProvider>
   )

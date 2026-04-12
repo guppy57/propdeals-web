@@ -13,10 +13,7 @@ import { AccountPage } from "@/pages/AccountPage"
 import { BillingPage } from "@/pages/BillingPage"
 import { NotificationsPage } from "@/pages/NotificationsPage"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
-
-function Protected({ children }: { children: React.ReactNode }) {
-  return <ProtectedRoute>{children}</ProtectedRoute>
-}
+import { PageLayout } from "@/components/PageLayout"
 
 export function App() {
   return (
@@ -24,16 +21,18 @@ export function App() {
       <Toaster position="bottom-center" />
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/home" element={<Protected><HomePage /></Protected>} />
-        <Route path="/assumption-sets" element={<Protected><AssumptionSetsPage /></Protected>} />
-        <Route path="/loans" element={<Protected><LoansPage /></Protected>} />
-        <Route path="/properties" element={<Protected><PropertiesPage /></Protected>} />
-        <Route path="/analyses" element={<Protected><AnalysesPage /></Protected>} />
-        <Route path="/neighborhoods" element={<Protected><NeighborhoodsPage /></Protected>} />
-        <Route path="/settings" element={<Protected><SettingsPage /></Protected>} />
-        <Route path="/account" element={<Protected><AccountPage /></Protected>} />
-        <Route path="/billing" element={<Protected><BillingPage /></Protected>} />
-        <Route path="/notifications" element={<Protected><NotificationsPage /></Protected>} />
+        <Route element={<ProtectedRoute><PageLayout /></ProtectedRoute>}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/assumption-sets" element={<AssumptionSetsPage />} />
+          <Route path="/loans" element={<LoansPage />} />
+          <Route path="/properties" element={<PropertiesPage />} />
+          <Route path="/analyses" element={<AnalysesPage />} />
+          <Route path="/neighborhoods" element={<NeighborhoodsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/billing" element={<BillingPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+        </Route>
       </Routes>
     </TooltipProvider>
   )

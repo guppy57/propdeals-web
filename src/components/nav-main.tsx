@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -17,6 +17,7 @@ export function NavMain({
     icon?: React.ReactNode
   }[]
 }) {
+  const location = useLocation()
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -34,7 +35,7 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title} isActive={location.pathname === item.url}>
                 <Link to={item.url}>
                   {item.icon}
                   <span>{item.title}</span>

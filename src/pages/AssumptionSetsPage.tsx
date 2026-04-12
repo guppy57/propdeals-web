@@ -12,7 +12,6 @@ import {
 import { ApiError, apiRequest } from "@/lib/api"
 import type { AssumptionSetResponse } from "@/types/assumption-set"
 import { AssumptionSetSheet } from "@/components/AssumptionSetSheet"
-import { PageLayout } from "@/components/PageLayout"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -92,6 +91,10 @@ export function AssumptionSetsPage() {
     )
   }
 
+  function handleDeleted(id: number) {
+    setData((prev) => prev.filter((item) => item.id !== id))
+  }
+
   const table = useReactTable({
     data,
     columns,
@@ -105,8 +108,8 @@ export function AssumptionSetsPage() {
     (table.getColumn("description")?.getFilterValue() as string) ?? ""
 
   return (
-    <PageLayout title="Assumption Sets">
-      <div className="flex flex-col gap-4 px-4 py-6 lg:px-6">
+    <>
+    <div className="flex flex-col gap-4 px-4 py-6 lg:px-6">
         <div className="flex items-center justify-between gap-4">
           <Input
             placeholder="Search by description..."
@@ -200,7 +203,8 @@ export function AssumptionSetsPage() {
         onOpenChange={setSheetOpen}
         assumptionSet={selectedSet}
         onSaved={handleSaved}
+        onDeleted={handleDeleted}
       />
-    </PageLayout>
+    </>
   )
 }

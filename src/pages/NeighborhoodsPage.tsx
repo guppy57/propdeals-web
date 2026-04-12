@@ -1,9 +1,205 @@
-import { PageLayout } from "@/components/PageLayout"
+import * as React from "react"
+import { PlusIcon } from "lucide-react"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+
+import { ApiError, apiRequest } from "@/lib/api"
+import type { NeighborhoodResponse } from "@/types/neighborhood"
+import { NeighborhoodSheet } from "@/components/NeighborhoodSheet"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+const columns: ColumnDef<NeighborhoodResponse>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => row.original.name.charAt(0).toUpperCase() + row.original.name.slice(1),
+  },
+  {
+    accessorKey: "city",
+    header: "City",
+    cell: ({ row }) => row.original.city ?? <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "state",
+    header: "State",
+    cell: ({ row }) => row.original.state ?? <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "letterGrade",
+    header: "Grade",
+    cell: ({ row }) => row.original.letterGrade ?? <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created",
+    cell: ({ row }) =>
+      new Date(row.original.createdAt).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
+  },
+]
 
 export function NeighborhoodsPage() {
+  const [data, setData] = React.useState<NeighborhoodResponse[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+
+  const [sheetOpen, setSheetOpen] = React.useState(false)
+  const [selectedNeighborhood, setSelectedNeighborhood] = React.useState<
+    NeighborhoodResponse | undefined
+  >()
+
+  React.useEffect(() => {
+    apiRequest<NeighborhoodResponse[]>("/api/neighborhoods")
+      .then(setData)
+      .catch((err) => {
+        setError(
+          err instanceof ApiError ? err.message : "Failed to load neighborhoods.",
+        )
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  function handleSaved(saved: NeighborhoodResponse) {
+    setData((prev) =>
+      prev.some((item) => item.id === saved.id)
+        ? prev.map((item) => (item.id === saved.id ? saved : item))
+        : [saved, ...prev],
+    )
+  }
+
+  function handleDeleted(id: number) {
+    setData((prev) => prev.filter((item) => item.id !== id))
+  }
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  })
+
+  const nameFilter =
+    (table.getColumn("name")?.getFilterValue() as string) ?? ""
+
   return (
-    <PageLayout title="Neighborhoods">
-      <div className="p-6" />
-    </PageLayout>
+    <>
+      <div className="flex flex-col gap-4 px-4 py-6 lg:px-6">
+        <div className="flex items-center justify-between gap-4">
+          <Input
+            placeholder="Search by name..."
+            value={nameFilter}
+            onChange={(e) =>
+              table.getColumn("name")?.setFilterValue(e.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Button
+            size="sm"
+            onClick={() => {
+              setSelectedNeighborhood(undefined)
+              setSheetOpen(true)
+            }}
+          >
+            <PlusIcon />
+            New Neighborhood
+          </Button>
+        </div>
+
+        {error ? (
+          <p className="text-sm text-destructive">{error}</p>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center text-muted-foreground"
+                    >
+                      Loading…
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSelectedNeighborhood(row.original)
+                        setSheetOpen(true)
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center text-muted-foreground"
+                    >
+                      {nameFilter
+                        ? "No neighborhoods match your search."
+                        : "No neighborhoods yet."}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
+
+      <NeighborhoodSheet
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        neighborhood={selectedNeighborhood}
+        onSaved={handleSaved}
+        onDeleted={handleDeleted}
+      />
+    </>
   )
 }

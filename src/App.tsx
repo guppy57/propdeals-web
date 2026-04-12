@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 import { TooltipProvider } from "@/components/ui/tooltip.tsx"
+import { Toaster } from "@/components/ui/sonner"
 import { LoginPage } from "@/pages/LoginPage"
 import { HomePage } from "@/pages/HomePage"
 import { AssumptionSetsPage } from "@/pages/AssumptionSetsPage"
@@ -20,6 +21,7 @@ function Protected({ children }: { children: React.ReactNode }) {
 export function App() {
   return (
     <TooltipProvider>
+      <Toaster position="bottom-center" />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<Protected><HomePage /></Protected>} />

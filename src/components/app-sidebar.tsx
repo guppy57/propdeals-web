@@ -27,6 +27,7 @@ import {
   CircleHelpIcon,
   SearchIcon,
   CommandIcon,
+  BinocularsIcon,
 } from "lucide-react"
 
 const data = {
@@ -40,6 +41,11 @@ const data = {
       title: "Loans",
       url: "/loans",
       icon: <LandmarkIcon />,
+    },
+    {
+      title: "Research Types",
+      url: "/research-types",
+      icon: <BinocularsIcon />,
     },
   ],
   realEstate: [

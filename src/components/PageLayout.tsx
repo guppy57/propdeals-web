@@ -15,6 +15,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/account": "Account",
   "/billing": "Billing",
   "/notifications": "Notifications",
+  "/research-types": "Research Types",
 }
 
 export function PageLayout() {

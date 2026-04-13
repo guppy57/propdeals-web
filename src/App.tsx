@@ -12,6 +12,7 @@ import { SettingsPage } from "@/pages/SettingsPage"
 import { AccountPage } from "@/pages/AccountPage"
 import { BillingPage } from "@/pages/BillingPage"
 import { NotificationsPage } from "@/pages/NotificationsPage"
+import { ResearchTypesPage } from "@/pages/ResearchTypesPage.tsx"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { PageLayout } from "@/components/PageLayout"
 
@@ -32,6 +33,7 @@ export function App() {
           <Route path="/account" element={<AccountPage />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/research-types" element={<ResearchTypesPage />} />
         </Route>
       </Routes>
     </TooltipProvider>

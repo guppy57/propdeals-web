@@ -28,6 +28,7 @@ import {
   SearchIcon,
   CommandIcon,
   BinocularsIcon,
+  ListFilter,
 } from "lucide-react"
 
 const data = {
@@ -55,14 +56,19 @@ const data = {
       icon: <HomeIcon />,
     },
     {
+      title: "Neighborhoods",
+      url: "/neighborhoods",
+      icon: <MapPinnedIcon />,
+    },
+    {
       title: "Analyses",
       url: "/analyses",
       icon: <BarChart3Icon />,
     },
     {
-      title: "Neighborhoods",
-      url: "/neighborhoods",
-      icon: <MapPinnedIcon />,
+      title: "Filters",
+      url: "/filters",
+      icon: <ListFilter />,
     },
   ],
   navSecondary: [

@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import {
   Building2, MapPin, Calendar, ExternalLink,
   Check, X, Fuel, GraduationCap, School, ShoppingCart,
-  Stethoscope, Leaf, Bus, Bike, Star, PersonStanding,
+  Stethoscope, Leaf, Bus, Star,
 } from "lucide-react"
 
 import { ApiError, apiRequest } from "@/lib/api"
@@ -11,7 +11,6 @@ import type { PropertyDetailResponse, PropertyResponse, UnitResponse } from "@/t
 import { PageHeaderContext } from "@/components/PageLayout"
 import { PropertyTypeBadge, StatusBadge } from "@/components/property-badges"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,

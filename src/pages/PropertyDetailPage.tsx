@@ -100,9 +100,9 @@ function BoolIconAlert({ val }: { val: boolean | null | undefined }) {
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-6 py-2.5 border-b border-border/40 last:border-0">
-      <span className="text-sm text-muted-foreground shrink-0">{label}</span>
-      <span className="text-sm font-medium text-right">
+    <div className="flex items-center justify-between gap-6 py-3 border-b border-border/30 last:border-0">
+      <span className="text-sm text-muted-foreground font-medium">{label}</span>
+      <span className="text-sm font-semibold text-right text-foreground">
         {value ?? <span className="text-muted-foreground font-normal">—</span>}
       </span>
     </div>
@@ -111,9 +111,9 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
 
 function NoteBlock({ title, content }: { title: string; content: string }) {
   return (
-    <div className="mt-3 rounded-lg bg-muted/40 border border-border/50 px-4 py-3">
+    <div className="mt-4 rounded-lg bg-muted/25 border border-border/40 px-4 py-3">
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{title}</p>
-      <p className="text-sm whitespace-pre-wrap leading-relaxed text-foreground/90">{content}</p>
+      <p className="text-sm whitespace-pre-wrap leading-relaxed text-foreground/85">{content}</p>
     </div>
   )
 }
@@ -128,13 +128,15 @@ function SectionCard({
   className?: string
 }) {
   return (
-    <Card className={`flex flex-col overflow-hidden ${className ?? ""}`}>
-      <CardHeader className="pb-2 pt-4 px-5 border-b border-border/50">
-        <CardTitle className="text-sm font-semibold text-foreground">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex-1 px-5 pb-5 pt-3">{children}</CardContent>
+    <Card className={`flex flex-col overflow-hidden border border-border/60 bg-card/50 backdrop-blur-sm ${className ?? ""}`}>
+      {title && (
+        <CardHeader className="pb-3 pt-4 px-5 border-b border-border/40">
+          <CardTitle className="text-sm font-semibold text-foreground">
+            {title}
+          </CardTitle>
+        </CardHeader>
+      )}
+      <CardContent className="flex-1 px-5 pb-5 pt-4">{children}</CardContent>
     </Card>
   )
 }
@@ -248,40 +250,40 @@ export function PropertyDetailPage() {
   ].filter((s) => s.value != null)
 
   return (
-    <div className="flex flex-col gap-5 px-4 py-6 lg:px-6">
+    <div className="flex flex-col gap-6 px-4 py-6 lg:px-8 max-w-7xl">
 
-      {/* ── Hero card ────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-        <div className="px-6 pt-6 pb-5">
-
-          {/* Address + status badges */}
-          <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-            <h1 className="text-2xl font-bold tracking-tight leading-snug">
+      {/* ── Hero section with address and key metrics ──────────────────────── */}
+      <div className="space-y-5">
+        
+        {/* Address + Badges */}
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               {p.fullAddress ?? p.address1}
             </h1>
-            <div className="flex items-center gap-2 shrink-0 pt-0.5">
+            <div className="flex items-center gap-3">
               <StatusBadge status={p.status} />
               <PropertyTypeBadge units={p.units} />
             </div>
           </div>
 
-          {/* Location + meta */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground mb-5">
+          {/* Location + meta info */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             {(p.city || p.state || p.zipCode) && (
-              <span className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" />
+              <span className="flex items-center gap-1.5 text-foreground/70">
+                <MapPin className="h-4 w-4 stroke-[1.5]" />
                 {[p.city, p.state, p.zipCode].filter(Boolean).join(", ")}
               </span>
             )}
             {p.county && (
-              <span className="flex items-center gap-1.5">
-                <Building2 className="h-3.5 w-3.5" />
+              <span className="flex items-center gap-1.5 text-foreground/70">
+                <Building2 className="h-4 w-4 stroke-[1.5]" />
                 {p.county} County
               </span>
             )}
             {p.listedDate && (
-              <span className="flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5" />
+              <span className="flex items-center gap-1.5 text-foreground/70">
+                <Calendar className="h-4 w-4 stroke-[1.5]" />
                 Listed {fmtDate(p.listedDate)}
               </span>
             )}
@@ -290,194 +292,192 @@ export function PropertyDetailPage() {
                 href={p.zillowLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+                className="flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors font-medium"
               >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Zillow
+                <ExternalLink className="h-4 w-4 stroke-[1.5]" />
+                View on Zillow
               </a>
             )}
           </div>
+        </div>
 
-          {/* Key stat tiles */}
-          {keyStats.length > 0 && (
-            <div className="flex flex-wrap gap-2.5">
-              {keyStats.map((s) => (
-                <div
-                  key={s.label}
-                  className={`flex flex-col rounded-lg border px-4 py-3 min-w-[80px] ${
-                    s.primary
-                      ? "bg-primary/5 border-primary/25"
-                      : "bg-muted/40 border-border/60"
-                  }`}
-                >
-                  <span className="text-xs text-muted-foreground font-medium mb-0.5">{s.label}</span>
-                  <span className={`font-bold tabular-nums leading-none ${s.primary ? "text-xl text-primary" : "text-lg"}`}>
-                    {s.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Key stat tiles - Grid layout */}
+        {keyStats.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {keyStats.map((s) => (
+              <div
+                key={s.label}
+                className={`flex flex-col rounded-lg p-4 transition-colors ${
+                  s.primary
+                    ? "bg-primary/8 border border-primary/20"
+                    : "bg-muted/50 border border-border/60"
+                }`}
+              >
+                <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-1">{s.label}</span>
+                <span className={`font-bold tabular-nums leading-tight ${s.primary ? "text-lg text-primary" : "text-base text-foreground"}`}>
+                  {s.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Row 1: Financials ─────────────────────────────────────────────── */}
+      <div>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Financial Details</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <SectionCard title="Acquisition" className="">
+            <DetailRow label="Purchase Price"    value={fmt(p.purchasePrice, "$")} />
+            <DetailRow label="Annual Tax"        value={fmt(p.annualTaxAmount, "$")} />
+            <DetailRow label="Electricity (est)" value={fmt(p.annualElectricityCostEst, "$", "/yr")} />
+            <DetailRow label="FSBO"              value={<BoolIcon val={p.isFsbo} />} />
+            <DetailRow label="Avg Ownership"     value={p.averageOwnershipDuration != null ? `${p.averageOwnershipDuration} yrs` : null} />
+          </SectionCard>
+          
+          <SectionCard title="Rental Income" className="">
+            <DetailRow label="Rent Estimate" value={
+              p.rentEstimate != null ? `${fmt(p.rentEstimate, "$")}/mo` : null
+            } />
+            <DetailRow label="Rent Range" value={
+              p.rentEstimateLow != null && p.rentEstimateHigh != null
+                ? `${fmt(p.rentEstimateLow, "$")} – ${fmt(p.rentEstimateHigh, "$")}`
+                : null
+            } />
+            <DetailRow label="Est. Value"   value={p.estPrice != null ? fmt(p.estPrice, "$") : null} />
+            <DetailRow label="Value Range"  value={
+              p.estPriceLow != null && p.estPriceHigh != null
+                ? `${fmt(p.estPriceLow, "$")} – ${fmt(p.estPriceHigh, "$")}`
+                : null
+            } />
+            <DetailRow label="Last Sale"    value={
+              p.lastPurchasePrice != null
+                ? `${fmt(p.lastPurchasePrice, "$")}${p.lastPurchaseDate ? ` · ${fmtDate(p.lastPurchaseDate)}` : ""}`
+                : null
+            } />
+          </SectionCard>
         </div>
       </div>
 
-      {/* ── Row 1: Financials + Scores & Status ──────────────────────────── */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      {/* ── Row 2: Scores & Location ────────────────────────────────────── */}
+      <div>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Market & Location Scores</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          <SectionCard title="Walkability Scores">
+            <DetailRow label="Walk Score" value={<ScoreBadge score={p.walkScore} />} />
+            <DetailRow label="Transit Score" value={<ScoreBadge score={p.transitScore} />} />
+            <DetailRow label="Bike Score" value={<ScoreBadge score={p.bikeScore} />} />
+          </SectionCard>
 
-        <SectionCard title="Financials" className="lg:col-span-2">
-          <div className="grid gap-x-10 sm:grid-cols-2">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Acquisition</p>
-              <DetailRow label="Purchase Price"    value={fmt(p.purchasePrice, "$")} />
-              <DetailRow label="Annual Tax"        value={fmt(p.annualTaxAmount, "$")} />
-              <DetailRow label="Electricity (est)" value={fmt(p.annualElectricityCostEst, "$", "/yr")} />
-              <DetailRow label="FSBO"              value={<BoolIcon val={p.isFsbo} />} />
-              <DetailRow label="Avg Ownership"     value={p.averageOwnershipDuration != null ? `${p.averageOwnershipDuration} yrs` : null} />
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Rental Income</p>
-              <DetailRow label="Rent Estimate" value={
-                p.rentEstimate != null ? `${fmt(p.rentEstimate, "$")}/mo` : null
-              } />
-              <DetailRow label="Rent Range" value={
-                p.rentEstimateLow != null && p.rentEstimateHigh != null
-                  ? `${fmt(p.rentEstimateLow, "$")} – ${fmt(p.rentEstimateHigh, "$")}`
-                  : null
-              } />
-              <DetailRow label="Est. Value"   value={p.estPrice != null ? fmt(p.estPrice, "$") : null} />
-              <DetailRow label="Value Range"  value={
-                p.estPriceLow != null && p.estPriceHigh != null
-                  ? `${fmt(p.estPriceLow, "$")} – ${fmt(p.estPriceHigh, "$")}`
-                  : null
-              } />
-              <DetailRow label="Last Sale"    value={
-                p.lastPurchasePrice != null
-                  ? `${fmt(p.lastPurchasePrice, "$")}${p.lastPurchaseDate ? ` · ${fmtDate(p.lastPurchaseDate)}` : ""}`
-                  : null
-              } />
-            </div>
-          </div>
-        </SectionCard>
-
-        <SectionCard title="Scores & Status">
-          {/* Walk / Transit / Bike scores */}
-          <div className="mb-4 space-y-0.5">
-            <div className="flex items-center justify-between py-2.5 border-b border-border/40">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <PersonStanding className="h-3.5 w-3.5" />Walk Score
-              </span>
-              <ScoreBadge score={p.walkScore} />
-            </div>
-            <div className="flex items-center justify-between py-2.5 border-b border-border/40">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Bus className="h-3.5 w-3.5" />Transit Score
-              </span>
-              <ScoreBadge score={p.transitScore} />
-            </div>
-            <div className="flex items-center justify-between py-2.5 border-b border-border/40">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Bike className="h-3.5 w-3.5" />Bike Score
-              </span>
-              <ScoreBadge score={p.bikeScore} />
-            </div>
-          </div>
-
-          <Separator className="mb-3" />
-
-          {p.propertyConditionScore != null && (
-            <div className="flex items-center justify-between py-2.5 border-b border-border/40">
-              <span className="text-sm text-muted-foreground">Condition</span>
-              <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-3.5 w-3.5 ${
-                      i < (p.propertyConditionScore ?? 0)
-                        ? "fill-amber-400 text-amber-400"
-                        : "fill-muted text-muted stroke-border"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          <DetailRow label="Has Tenants"     value={<BoolIcon val={p.hasTenants} />} />
-          <DetailRow label="Reduced Price"   value={<BoolIcon val={p.hasReducedPrice} />} />
-          <DetailRow label="Rent DD Done"    value={<BoolIcon val={p.rentDdCompleted} />} />
-          <DetailRow label="Market Research" value={<BoolIcon val={p.hasMarketResearch} />} />
-          {p.lat != null && p.lon != null && (
-            <DetailRow label="Coordinates" value={`${p.lat.toFixed(4)}, ${p.lon.toFixed(4)}`} />
-          )}
-        </SectionCard>
-      </div>
-
-      {/* ── Row 2: Amenities + Due Diligence + Notes ─────────────────────── */}
-      <div className="grid gap-4 lg:grid-cols-3">
-
-        {hasAmenities && (
-          <SectionCard title="Nearby Amenities">
-            {amenities.map(({ label, dist, count }) => (
-              <div
-                key={label}
-                className="flex items-center justify-between gap-4 py-2.5 border-b border-border/40 last:border-0"
-              >
-                <span className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
-                  <span className="text-foreground/50">{AMENITY_ICONS[label]}</span>
-                  {label}
-                </span>
-                <div className="text-right">
-                  <span className="text-sm font-semibold tabular-nums">
-                    {dist != null ? `${dist} mi` : "—"}
-                  </span>
-                  {count != null && (
-                    <span className="block text-xs text-muted-foreground">{count} within 5mi</span>
-                  )}
+          <SectionCard title="Property Condition">
+            {p.propertyConditionScore != null && (
+              <div className="mb-4">
+                <label className="text-sm text-muted-foreground block mb-2">Condition Score</label>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${
+                        i < (p.propertyConditionScore ?? 0)
+                          ? "fill-amber-400 text-amber-400"
+                          : "fill-muted text-muted stroke-border"
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
+            <DetailRow label="Has Tenants"     value={<BoolIcon val={p.hasTenants} />} />
+            <DetailRow label="Reduced Price"   value={<BoolIcon val={p.hasReducedPrice} />} />
+            <DetailRow label="Rent DD Done"    value={<BoolIcon val={p.rentDdCompleted} />} />
+            <DetailRow label="Market Research" value={<BoolIcon val={p.hasMarketResearch} />} />
           </SectionCard>
-        )}
 
-        <SectionCard title="Due Diligence">
-          <DetailRow label="County Records"    value={<BoolIcon val={p.obtainedCountyRecords} />} />
-          <DetailRow label="Deed Restrictions" value={<BoolIconAlert val={p.hasDeedRestrictions} />} />
-          <DetailRow label="HOA"               value={<BoolIconAlert val={p.hasHao} />} />
-          <DetailRow label="Historic Preserve" value={<BoolIconAlert val={p.hasHistoricPreservation} />} />
-          <DetailRow label="Flood Zone"        value={<BoolIconAlert val={p.inFloodZone} />} />
-          <DetailRow label="Easements"         value={p.hasEasements ? (p.easements || bool(true)) : bool(false)} />
-          <DetailRow label="Setbacks"          value={p.setbacks || null} />
-          <DetailRow label="Open Permits"      value={<BoolIconAlert val={p.hasOpenPulledPermits} />} />
-          <DetailRow label="Work w/o Permits"  value={<BoolIconAlert val={p.hasWorkDoneWoPermits} />} />
-          <DetailRow
-            label="Turnover Rate"
-            value={p.historicalTurnoverRate != null ? `${(p.historicalTurnoverRate * 100).toFixed(1)}%` : null}
-          />
-          {p.countyRecordNotes && <NoteBlock title="County Record Notes" content={p.countyRecordNotes} />}
-        </SectionCard>
+          <SectionCard title="Location Data">
+            {p.lat != null && p.lon != null && (
+              <DetailRow label="Coordinates" value={`${p.lat.toFixed(4)}, ${p.lon.toFixed(4)}`} />
+            )}
+          </SectionCard>
+        </div>
+      </div>
 
-        <SectionCard title="Research & Notes">
-          {p.sellerCircumstances && (
+      {/* ── Row 3: Amenities ──────────────────────────────────────────────── */}
+      {hasAmenities && (
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Nearby Amenities</h2>
+          <SectionCard title="">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {amenities.map(({ label, dist, count }) => (
+                <div
+                  key={label}
+                  className="flex flex-col p-3 rounded-lg bg-muted/30 border border-border/50 hover:border-border transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
+                    <span className="text-primary">{AMENITY_ICONS[label]}</span>
+                    {label}
+                  </span>
+                  <div className="space-y-1">
+                    {dist != null && (
+                      <p className="text-sm font-semibold text-foreground">
+                        {dist} <span className="text-xs text-muted-foreground">mi away</span>
+                      </p>
+                    )}
+                    {count != null && (
+                      <p className="text-xs text-muted-foreground">{count} within 5 miles</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SectionCard>
+        </div>
+      )}
+
+      {/* ── Row 4: Due Diligence & Legal ──────────────────────────────────── */}
+      <div>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Due Diligence & Legal</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <SectionCard title="Legal & Permits">
+            <DetailRow label="County Records"    value={<BoolIcon val={p.obtainedCountyRecords} />} />
+            <DetailRow label="Deed Restrictions" value={<BoolIconAlert val={p.hasDeedRestrictions} />} />
+            <DetailRow label="HOA"               value={<BoolIconAlert val={p.hasHao} />} />
+            <DetailRow label="Historic Preserve" value={<BoolIconAlert val={p.hasHistoricPreservation} />} />
+            <DetailRow label="Flood Zone"        value={<BoolIconAlert val={p.inFloodZone} />} />
+            <DetailRow label="Easements"         value={p.hasEasements ? (p.easements || bool(true)) : bool(false)} />
+            <DetailRow label="Setbacks"          value={p.setbacks || null} />
+            <DetailRow label="Open Permits"      value={<BoolIconAlert val={p.hasOpenPulledPermits} />} />
+            <DetailRow label="Work w/o Permits"  value={<BoolIconAlert val={p.hasWorkDoneWoPermits} />} />
             <DetailRow
-              label="Seller Situation"
-              value={p.sellerCircumstances
-                .replace(/_/g, " ")
-                .toLowerCase()
-                .replace(/\b\w/g, (c) => c.toUpperCase())}
+              label="Turnover Rate"
+              value={p.historicalTurnoverRate != null ? `${(p.historicalTurnoverRate * 100).toFixed(1)}%` : null}
             />
-          )}
-          {p.reasonForPassing && (
-            <NoteBlock title="Reason for Passing" content={p.reasonForPassing} />
-          )}
-          {p.propertyNotes && (
-            <NoteBlock title="Property Notes" content={p.propertyNotes} />
-          )}
-          {p.whitepagesNotes && (
-            <NoteBlock title="Whitepages Notes" content={p.whitepagesNotes} />
-          )}
-          {!p.sellerCircumstances && !p.reasonForPassing && !p.propertyNotes && !p.whitepagesNotes && (
-            <p className="text-sm text-muted-foreground py-2">No notes recorded.</p>
-          )}
-        </SectionCard>
+            {p.countyRecordNotes && <NoteBlock title="County Record Notes" content={p.countyRecordNotes} />}
+          </SectionCard>
+
+          <SectionCard title="Research & Notes">
+            {p.sellerCircumstances && (
+              <DetailRow
+                label="Seller Situation"
+                value={p.sellerCircumstances
+                  .replace(/_/g, " ")
+                  .toLowerCase()
+                  .replace(/\b\w/g, (c) => c.toUpperCase())}
+              />
+            )}
+            {p.reasonForPassing && (
+              <NoteBlock title="Reason for Passing" content={p.reasonForPassing} />
+            )}
+            {p.propertyNotes && (
+              <NoteBlock title="Property Notes" content={p.propertyNotes} />
+            )}
+            {p.whitepagesNotes && (
+              <NoteBlock title="Whitepages Notes" content={p.whitepagesNotes} />
+            )}
+            {!p.sellerCircumstances && !p.reasonForPassing && !p.propertyNotes && !p.whitepagesNotes && (
+              <p className="text-sm text-muted-foreground py-2">No notes recorded.</p>
+            )}
+          </SectionCard>
+        </div>
       </div>
 
       {/* ── Units ────────────────────────────────────────────────────────── */}

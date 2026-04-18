@@ -1,12 +1,14 @@
 import { supabase } from '@/lib/supabase';
 
 export class ApiError extends Error {
+  readonly status: number;
   constructor(
-    public readonly status: number,
+    status: number,
     message: string,
   ) {
     super(message);
     this.name = 'ApiError';
+    this.status = status;
   }
 }
 

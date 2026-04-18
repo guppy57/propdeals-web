@@ -101,7 +101,7 @@ export function ResearchTypeSheet({
     const result = formSchema.safeParse(values)
     if (!result.success) {
       const fieldErrors: Record<string, string> = {}
-      for (const err of result.error.errors) {
+      for (const err of result.error.issues) {
         const field = err.path[0] as string
         if (!fieldErrors[field]) fieldErrors[field] = err.message
       }

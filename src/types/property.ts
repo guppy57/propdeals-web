@@ -100,3 +100,22 @@ export interface PropertyResponse extends PropertyRequest {
   createdAt: string
   updatedAt: string
 }
+
+export interface UnitResponse {
+  id: number
+  propertyId: string
+  unitNum: number
+  beds: number | null
+  baths: number | null
+  estimatedSqrft: number | null
+  rentEstimate: number | null
+  rentEstimateLow: number | null
+  rentEstimateHigh: number | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PropertyDetailResponse {
+  property: PropertyResponse
+  units: UnitResponse[]
+}

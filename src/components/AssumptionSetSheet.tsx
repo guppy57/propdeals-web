@@ -52,6 +52,14 @@ const formSchema = z.object({
     z.string().nullable().optional(),
   ),
   landValuePrcnt: numField(),
+  brokerFees: numField(),
+  homeInspectionSfhFee: numField(),
+  homeInspectionMfBaseFee: numField(),
+  homeInspectionMfPerUnitFee: numField(),
+  propertySurveyFee: numField(),
+  pestInspectionFee: numField(),
+  structuralEngineeringFee: numField(),
+  sewerScopeFee: numField(),
   rentAppreciationRate: numField(),
   propertyTaxRate: numField(),
   homeInsuranceRate: numField(),
@@ -91,6 +99,14 @@ type FormValues = {
   federalTaxRate: string
   stateTaxCode: string
   landValuePrcnt: string
+  brokerFees: string
+  homeInspectionSfhFee: string
+  homeInspectionMfBaseFee: string
+  homeInspectionMfPerUnitFee: string
+  propertySurveyFee: string
+  pestInspectionFee: string
+  structuralEngineeringFee: string
+  sewerScopeFee: string
   rentAppreciationRate: string
   propertyTaxRate: string
   homeInsuranceRate: string
@@ -126,6 +142,14 @@ const emptyValues: FormValues = {
   federalTaxRate: "",
   stateTaxCode: "",
   landValuePrcnt: "",
+  brokerFees: "",
+  homeInspectionSfhFee: "",
+  homeInspectionMfBaseFee: "",
+  homeInspectionMfPerUnitFee: "",
+  propertySurveyFee: "",
+  pestInspectionFee: "",
+  structuralEngineeringFee: "",
+  sewerScopeFee: "",
   rentAppreciationRate: "",
   propertyTaxRate: "",
   homeInsuranceRate: "",
@@ -163,6 +187,14 @@ function toFormValues(s: AssumptionSetResponse): FormValues {
     federalTaxRate: n(s.federalTaxRate),
     stateTaxCode: s.stateTaxCode ?? "",
     landValuePrcnt: n(s.landValuePrcnt),
+    brokerFees: n(s.brokerFees),
+    homeInspectionSfhFee: n(s.homeInspectionSfhFee),
+    homeInspectionMfBaseFee: n(s.homeInspectionMfBaseFee),
+    homeInspectionMfPerUnitFee: n(s.homeInspectionMfPerUnitFee),
+    propertySurveyFee: n(s.propertySurveyFee),
+    pestInspectionFee: n(s.pestInspectionFee),
+    structuralEngineeringFee: n(s.structuralEngineeringFee),
+    sewerScopeFee: n(s.sewerScopeFee),
     rentAppreciationRate: n(s.rentAppreciationRate),
     propertyTaxRate: n(s.propertyTaxRate),
     homeInsuranceRate: n(s.homeInsuranceRate),
@@ -441,6 +473,21 @@ export function AssumptionSetSheet({
                 onChange={(e) => setField("stateTaxCode", e.target.value)}
                 disabled={submitting}
               />
+            </div>
+
+            <Separator />
+
+            {/* Closing cost defaults */}
+            <SectionLabel>Closing Cost Defaults</SectionLabel>
+            <div className="grid grid-cols-2 gap-3">
+              <NumInput {...fp} id="brokerFees" label="Broker Fees" field="brokerFees" />
+              <NumInput {...fp} id="homeInspectionSfhFee" label="Home Inspection (SFH)" field="homeInspectionSfhFee" />
+              <NumInput {...fp} id="homeInspectionMfBaseFee" label="Home Inspection MF Base" field="homeInspectionMfBaseFee" />
+              <NumInput {...fp} id="homeInspectionMfPerUnitFee" label="Home Inspection MF / Unit" field="homeInspectionMfPerUnitFee" />
+              <NumInput {...fp} id="propertySurveyFee" label="Property Survey" field="propertySurveyFee" />
+              <NumInput {...fp} id="pestInspectionFee" label="Pest Inspection" field="pestInspectionFee" />
+              <NumInput {...fp} id="structuralEngineeringFee" label="Structural Engineering" field="structuralEngineeringFee" />
+              <NumInput {...fp} id="sewerScopeFee" label="Sewer Scope" field="sewerScopeFee" />
             </div>
 
             <Separator />

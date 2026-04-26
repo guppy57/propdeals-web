@@ -16,6 +16,16 @@ export interface AssumptionSetRequest {
   stateTaxCode?: string | null;
   landValuePrcnt?: number | null;
 
+  // Closing cost line item defaults
+  brokerFees?: number | null;
+  homeInspectionSfhFee?: number | null;
+  homeInspectionMfBaseFee?: number | null;
+  homeInspectionMfPerUnitFee?: number | null;
+  propertySurveyFee?: number | null;
+  pestInspectionFee?: number | null;
+  structuralEngineeringFee?: number | null;
+  sewerScopeFee?: number | null;
+
   // ── LTR-only ────────────────────────────────────────────────────────────
   rentAppreciationRate?: number | null;
   propertyTaxRate?: number | null;

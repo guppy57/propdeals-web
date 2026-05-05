@@ -46,6 +46,8 @@ export interface AssumptionSetRequest {
   utilityInternetBase?: number | null;
   utilityBaselineSqft?: number | null;
   mfAppreciationRateOverride?: number | null;
+  qeSfhMultiplier?: number | null;
+  qeMfMultiplier?: number | null;
 
   // ── FLIP-only ────────────────────────────────────────────────────────────
   rehabContingencyPct?: number | null;

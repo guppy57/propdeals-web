@@ -79,6 +79,8 @@ const formSchema = z.object({
   utilityInternetBase: numField(),
   utilityBaselineSqft: numField(),
   mfAppreciationRateOverride: numField(),
+  qeSfhMultiplier: numField(),
+  qeMfMultiplier: numField(),
   rehabContingencyPct: numField(),
   holdingCostRateMonthly: numField(),
   flipSellingCostsRate: numField(),
@@ -126,6 +128,8 @@ type FormValues = {
   utilityInternetBase: string
   utilityBaselineSqft: string
   mfAppreciationRateOverride: string
+  qeSfhMultiplier: string
+  qeMfMultiplier: string
   rehabContingencyPct: string
   holdingCostRateMonthly: string
   flipSellingCostsRate: string
@@ -169,6 +173,8 @@ const emptyValues: FormValues = {
   utilityInternetBase: "",
   utilityBaselineSqft: "",
   mfAppreciationRateOverride: "",
+  qeSfhMultiplier: "",
+  qeMfMultiplier: "",
   rehabContingencyPct: "",
   holdingCostRateMonthly: "",
   flipSellingCostsRate: "",
@@ -214,6 +220,8 @@ function toFormValues(s: AssumptionSetResponse): FormValues {
     utilityInternetBase: n(s.utilityInternetBase),
     utilityBaselineSqft: n(s.utilityBaselineSqft),
     mfAppreciationRateOverride: n(s.mfAppreciationRateOverride),
+    qeSfhMultiplier: n(s.qeSfhMultiplier),
+    qeMfMultiplier: n(s.qeMfMultiplier),
     rehabContingencyPct: n(s.rehabContingencyPct),
     holdingCostRateMonthly: n(s.holdingCostRateMonthly),
     flipSellingCostsRate: n(s.flipSellingCostsRate),
@@ -536,6 +544,12 @@ export function AssumptionSetSheet({
                   <NumInput {...fp} id="defaultPropertyConditionScore" label="Property Condition Score" field="defaultPropertyConditionScore" />
                   <NumInput {...fp} id="grossAnnualIncome" label="Gross Annual Income" field="grossAnnualIncome" />
                   <NumInput {...fp} id="mfAppreciationRateOverride" label="MF Appreciation Override" field="mfAppreciationRateOverride" />
+                </div>
+
+                <SectionLabel>Quick Estimate</SectionLabel>
+                <div className="grid grid-cols-2 gap-3">
+                  <NumInput {...fp} id="qeSfhMultiplier" label="SFH Multiplier" field="qeSfhMultiplier" />
+                  <NumInput {...fp} id="qeMfMultiplier" label="MF Multiplier" field="qeMfMultiplier" />
                 </div>
 
                 <SectionLabel>Utilities — Baseline</SectionLabel>

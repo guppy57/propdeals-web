@@ -39,6 +39,8 @@ export interface AssumptionSetRequest {
   residentialDepreciationPeriodYrs?: number | null;
   defaultPropertyConditionScore?: number | null;
   grossAnnualIncome?: number | null;
+  grossAnnualSalary?: number | null;
+  incomeStateTaxCode?: string | null;
   emergencyFundMonthlyAmount?: number | null;
   emergencyFundMonths?: number | null;
   utilityElectricBase?: number | null;

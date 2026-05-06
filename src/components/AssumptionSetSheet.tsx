@@ -72,6 +72,11 @@ const formSchema = z.object({
   residentialDepreciationPeriodYrs: numField(),
   defaultPropertyConditionScore: numField(),
   grossAnnualIncome: numField(),
+  grossAnnualSalary: numField(),
+  incomeStateTaxCode: z.preprocess(
+    (v) => (v === "" ? null : v),
+    z.string().nullable().optional(),
+  ),
   emergencyFundMonthlyAmount: numField(),
   emergencyFundMonths: numField(),
   utilityElectricBase: numField(),
@@ -123,6 +128,8 @@ type FormValues = {
   residentialDepreciationPeriodYrs: string
   defaultPropertyConditionScore: string
   grossAnnualIncome: string
+  grossAnnualSalary: string
+  incomeStateTaxCode: string
   emergencyFundMonthlyAmount: string
   emergencyFundMonths: string
   utilityElectricBase: string
@@ -170,6 +177,8 @@ const emptyValues: FormValues = {
   residentialDepreciationPeriodYrs: "",
   defaultPropertyConditionScore: "",
   grossAnnualIncome: "",
+  grossAnnualSalary: "",
+  incomeStateTaxCode: "",
   emergencyFundMonthlyAmount: "",
   emergencyFundMonths: "",
   utilityElectricBase: "",
@@ -219,6 +228,8 @@ function toFormValues(s: AssumptionSetResponse): FormValues {
     residentialDepreciationPeriodYrs: n(s.residentialDepreciationPeriodYrs),
     defaultPropertyConditionScore: n(s.defaultPropertyConditionScore),
     grossAnnualIncome: n(s.grossAnnualIncome),
+    grossAnnualSalary: n(s.grossAnnualSalary),
+    incomeStateTaxCode: s.incomeStateTaxCode ?? "",
     emergencyFundMonthlyAmount: n(s.emergencyFundMonthlyAmount),
     emergencyFundMonths: n(s.emergencyFundMonths),
     utilityElectricBase: n(s.utilityElectricBase),
@@ -551,7 +562,18 @@ export function AssumptionSetSheet({
                   <NumInput {...fp} id="residentialDepreciationPeriodYrs" label="Depreciation Period (yrs)" field="residentialDepreciationPeriodYrs" />
                   <NumInput {...fp} id="defaultPropertyConditionScore" label="Property Condition Score" field="defaultPropertyConditionScore" />
                   <NumInput {...fp} id="grossAnnualIncome" label="Gross Annual Income" field="grossAnnualIncome" />
+                  <NumInput {...fp} id="grossAnnualSalary" label="Gross Annual Salary" field="grossAnnualSalary" />
                   <NumInput {...fp} id="mfAppreciationRateOverride" label="MF Appreciation Override" field="mfAppreciationRateOverride" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <Label htmlFor="incomeStateTaxCode">Income Tax State Code</Label>
+                  <Input
+                    id="incomeStateTaxCode"
+                    placeholder="e.g. IA"
+                    value={values.incomeStateTaxCode}
+                    onChange={(e) => setField("incomeStateTaxCode", e.target.value)}
+                    disabled={submitting}
+                  />
                 </div>
 
                 <SectionLabel>Quick Estimate</SectionLabel>

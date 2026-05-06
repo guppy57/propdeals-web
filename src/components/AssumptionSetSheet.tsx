@@ -72,6 +72,8 @@ const formSchema = z.object({
   residentialDepreciationPeriodYrs: numField(),
   defaultPropertyConditionScore: numField(),
   grossAnnualIncome: numField(),
+  emergencyFundMonthlyAmount: numField(),
+  emergencyFundMonths: numField(),
   utilityElectricBase: numField(),
   utilityGasBase: numField(),
   utilityWaterBase: numField(),
@@ -121,6 +123,8 @@ type FormValues = {
   residentialDepreciationPeriodYrs: string
   defaultPropertyConditionScore: string
   grossAnnualIncome: string
+  emergencyFundMonthlyAmount: string
+  emergencyFundMonths: string
   utilityElectricBase: string
   utilityGasBase: string
   utilityWaterBase: string
@@ -166,6 +170,8 @@ const emptyValues: FormValues = {
   residentialDepreciationPeriodYrs: "",
   defaultPropertyConditionScore: "",
   grossAnnualIncome: "",
+  emergencyFundMonthlyAmount: "",
+  emergencyFundMonths: "",
   utilityElectricBase: "",
   utilityGasBase: "",
   utilityWaterBase: "",
@@ -213,6 +219,8 @@ function toFormValues(s: AssumptionSetResponse): FormValues {
     residentialDepreciationPeriodYrs: n(s.residentialDepreciationPeriodYrs),
     defaultPropertyConditionScore: n(s.defaultPropertyConditionScore),
     grossAnnualIncome: n(s.grossAnnualIncome),
+    emergencyFundMonthlyAmount: n(s.emergencyFundMonthlyAmount),
+    emergencyFundMonths: n(s.emergencyFundMonths),
     utilityElectricBase: n(s.utilityElectricBase),
     utilityGasBase: n(s.utilityGasBase),
     utilityWaterBase: n(s.utilityWaterBase),
@@ -550,6 +558,12 @@ export function AssumptionSetSheet({
                 <div className="grid grid-cols-2 gap-3">
                   <NumInput {...fp} id="qeSfhMultiplier" label="SFH Multiplier" field="qeSfhMultiplier" />
                   <NumInput {...fp} id="qeMfMultiplier" label="MF Multiplier" field="qeMfMultiplier" />
+                </div>
+
+                <SectionLabel>Emergency Fund</SectionLabel>
+                <div className="grid grid-cols-2 gap-3">
+                  <NumInput {...fp} id="emergencyFundMonthlyAmount" label="Monthly Amount ($)" field="emergencyFundMonthlyAmount" />
+                  <NumInput {...fp} id="emergencyFundMonths" label="Months of Reserve" field="emergencyFundMonths" />
                 </div>
 
                 <SectionLabel>Utilities — Baseline</SectionLabel>
